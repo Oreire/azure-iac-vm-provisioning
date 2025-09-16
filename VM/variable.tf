@@ -59,11 +59,6 @@ variable "public_ip_allocation" {
   type        = string
 }
 
-variable "public_ip_sku" {
-  description = "SKU of the public IP (Basic/Standard)"
-  type        = string
-}
-
 variable "nic_name" {
   description = "Name of the network interface"
   type        = string
@@ -72,6 +67,7 @@ variable "nic_name" {
 variable "enable_accelerated_networking" {
   description = "Enable accelerated networking on NIC"
   type        = bool
+  default     = false
 }
 
 variable "vm_name" {
@@ -94,22 +90,14 @@ variable "admin_username" {
   type        = string
 }
 
-variable "admin_password" {
-  description = "Admin password for the VM"
-  type        = string
-  sensitive   = true
-}
-
 variable "os_disk_type" {
   description = "Storage type for OS disk"
   type        = string
 }
 
-
 variable "subscription_id" {
   description = "The subscription ID for the Azure account"
   type        = string
-  
 }
 
 variable "data_disks" {
