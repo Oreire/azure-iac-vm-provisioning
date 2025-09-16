@@ -100,6 +100,22 @@ variable "subscription_id" {
   type        = string
 }
 
+variable "client_id" {
+  description = "The Client ID (AppId) of the Azure Service Principal"
+  type        = string
+}
+
+variable "client_secret" {
+  description = "The Client Secret (password) of the Azure Service Principal"
+  type        = string
+  sensitive   = true
+}
+
+variable "tenant_id" {
+  description = "The Tenant ID of the Azure Active Directory"
+  type        = string
+}
+
 variable "data_disks" {
   description = "Data disks to attach to the VM"
   type = list(object({
@@ -109,4 +125,9 @@ variable "data_disks" {
     disk_size_gb         = number
     caching              = string
   }))
+}
+variable "AZURE_STORAGE_ACCOUNT" {
+  description = "The name of the Azure Storage Account for Terraform backend"
+  type        = string
+  default     = "devsecopscloudtfstate"
 }
