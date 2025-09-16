@@ -123,3 +123,5 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk_attach" {
   lun                = each.value.lun
   caching            = each.value.caching
 }
+
+# ssh -i ~/.ssh/laredo_id_rsa devsecops@172.166.111.25

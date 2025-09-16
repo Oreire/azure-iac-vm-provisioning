@@ -68,4 +68,3 @@ terraform apply destroy.out
 
 ✅ This pattern is especially useful in **production or CI/CD pipelines**, where you want to approve a reviewed plan before execution.
 
-ssh -i ~/.ssh/laredo_id_rsa devsecops@172.166.111.25
