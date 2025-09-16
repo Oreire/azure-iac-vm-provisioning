@@ -17,7 +17,7 @@ on:
 
 env:
   TF_VERSION: 1.7.5
-  TF_WORKING_DIR: infra
+  TF_WORKING_DIR: VM
 
 jobs:
   terraform:
