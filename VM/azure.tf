@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
 # -------------------------
 # Resources
 # -------------------------
@@ -51,7 +47,7 @@ resource "azurerm_public_ip" "public_ip" {
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = var.public_ip_allocation
-  sku                 = var.public_ip_sku
+  sku                 = "Standard" # Use Standard SKU to avoid quota issues
 }
 
 resource "azurerm_network_interface" "nic" {
@@ -66,9 +62,11 @@ resource "azurerm_network_interface" "nic" {
     public_ip_address_id          = azurerm_public_ip.public_ip.id
   }
 
+  # Optionally attach NSG at NIC level
   # network_security_group_id     = azurerm_network_security_group.nsg.id
 }
 
+# Create managed data disks
 resource "azurerm_managed_disk" "data_disk" {
   for_each             = { for disk in var.data_disks : disk.name => disk }
   name                 = each.value.name
@@ -79,13 +77,13 @@ resource "azurerm_managed_disk" "data_disk" {
   disk_size_gb         = each.value.disk_size_gb
 }
 
+# Create the Linux VM (SSH-based authentication)
 resource "azurerm_linux_virtual_machine" "vm" {
   name                = var.vm_name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
   size                = var.vm_size
   admin_username      = var.admin_username
-  admin_password      = var.admin_password
   computer_name       = var.vm_computer_name
   network_interface_ids = [
     azurerm_network_interface.nic.id
@@ -96,13 +94,10 @@ resource "azurerm_linux_virtual_machine" "vm" {
     storage_account_type = var.os_disk_type
   }
 
-  dynamic "storage_data_disk" {
-    for_each = var.data_disks
-    content {
-      lun             = storage_data_disk.value.lun
-      managed_disk_id = azurerm_managed_disk.data_disk[storage_data_disk.value.name].id
-      caching         = storage_data_disk.value.caching
-    }
+  # SSH Key Authentication (use your public key path)
+  admin_ssh_key {
+    username   = var.admin_username
+    public_key = file("~/.ssh/laredo_id_rsa.pub")
   }
 
   source_image_reference {
@@ -112,10 +107,16 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 
-  boot_diagnostics {
-    # By omitting 'storage_account_uri', managed boot diagnostics will be enabled by default
-  }
+  boot_diagnostics {}
 
   provision_vm_agent = true
 }
 
+# Attach managed disks to the VM
+resource "azurerm_virtual_machine_data_disk_attachment" "data_disk_attach" {
+  for_each           = { for disk in var.data_disks : disk.name => disk }
+  managed_disk_id    = azurerm_managed_disk.data_disk[each.key].id
+  virtual_machine_id = azurerm_linux_virtual_machine.vm.id
+  lun                = each.value.lun
+  caching            = each.value.caching
+}
