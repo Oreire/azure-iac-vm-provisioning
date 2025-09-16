@@ -105,6 +105,13 @@ variable "os_disk_type" {
   type        = string
 }
 
+
+variable "subscription_id" {
+  description = "The subscription ID for the Azure account"
+  type        = string
+  
+}
+
 variable "data_disks" {
   description = "Data disks to attach to the VM"
   type = list(object({
