@@ -44,21 +44,6 @@ jobs:
           echo "ARM_TENANT_ID=${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}" >> $GITHUB_ENV
           echo "ARM_SUBSCRIPTION_ID=${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}" >> $GITHUB_ENV
 
-      - name: Ensure Terraform backend storage exists
-        run: |
-          az group create --name devsecops-cloud_group --location "UK South"
-          az storage account create \
-            --name ${{ secrets.AZURE_STORAGE_ACCOUNT }} \
-            --resource-group devsecops-cloud_group \
-            --location "UK South" \
-            --sku Standard_LRS \
-            --kind StorageV2 \
-            --access-tier Hot || echo "Storage account may already exist"
-          az storage container create \
-            --name tfstate \
-            --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT }} \
-            --auth-mode login || echo "Container may already exist"
-
       - name: Terraform Init
         run: |
           terraform -chdir=${{ env.TF_WORKING_DIR }} init \
