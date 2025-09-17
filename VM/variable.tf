@@ -116,3 +116,9 @@ variable "ssh_public_key" {
   description = "The public SSH key used for VM login"
   type        = string
 }
+
+variable "subscription_id" {
+  description = "The subscription ID for the Azure account"
+  type        = string
+  
+}
