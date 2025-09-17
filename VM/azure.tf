@@ -60,7 +60,7 @@ resource "azurerm_network_interface" "nic" {
   name                = var.nic_name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
-  enable_accelerated_networking = var.enable_accelerated_networking # ✅ Added
+  # enable_accelerated_networking = var.enable_accelerated_networking # ✅ Added
 
   ip_configuration {
     name                          = "ipconfig1"
