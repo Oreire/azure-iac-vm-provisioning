@@ -63,7 +63,7 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform plan  -var-file="azure.tfvars" \
+        run: terraform -chdir=VM plan -var-file="azure.tfvars"
         #   -var-file="azure.tfvars" \
         #   -var "client_id=${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}" \
         #   -var "client_secret=${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}" \
