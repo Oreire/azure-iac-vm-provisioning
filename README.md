@@ -1,7 +1,7 @@
 # azure-k8s-devsecops
 AZURE DEVSECOPS IMPLEMENTATION
 
-
+xxxxxxxxx
 terraform plan -var-file="azure.tfvars"
 
 terraform apply -var-file="azure.tfvars"
