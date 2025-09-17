@@ -53,13 +53,14 @@ resource "azurerm_public_ip" "public_ip" {
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = var.public_ip_allocation
-  sku                 = "Standard" # Use Standard SKU to avoid quota issues
+  sku                 = "Standard" # ✅ Enforce Standard SKU
 }
 
 resource "azurerm_network_interface" "nic" {
   name                = var.nic_name
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
+  enable_accelerated_networking = var.enable_accelerated_networking # ✅ Added
 
   ip_configuration {
     name                          = "ipconfig1"
@@ -97,10 +98,10 @@ resource "azurerm_linux_virtual_machine" "vm" {
     storage_account_type = var.os_disk_type
   }
 
-  # SSH Key Authentication (use your public key path)
+  # ✅ Use variable for SSH key instead of hardcoded local path
   admin_ssh_key {
     username   = var.admin_username
-    public_key = file("~/.ssh/laredo_id_rsa.pub")
+    public_key = var.ssh_public_key
   }
 
   source_image_reference {
@@ -110,8 +111,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 
-  boot_diagnostics {}
-
+  boot_diagnostics {} # ✅ Managed Boot Diagnostics enabled
   provision_vm_agent = true
 }
 
@@ -123,5 +123,3 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk_attach" {
   lun                = each.value.lun
   caching            = each.value.caching
 }
-
-# ssh -i ~/.ssh/laredo_id_rsa devsecops@172.166.111.25
