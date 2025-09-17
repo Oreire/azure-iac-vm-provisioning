@@ -1,7 +1,7 @@
 variable "location" {
   description = "Azure region"
   type        = string
-  default     = "UK South"
+  default     = "UK West"
 }
 
 variable "resource_group_name" {
@@ -106,10 +106,10 @@ variable "data_disks" {
   }))
 }
 
-variable "AZURE_STORAGE_ACCOUNT" {
-  description = "The name of the Azure Storage Account for Terraform backend"
+# Variables for backend and secrets
+variable "storage_account_name" {
+  description = "The Azure Storage Account for Terraform backend"
   type        = string
-  default     = "devsecopscloudtfstate"
 }
 
 variable "ssh_public_key" {
@@ -117,8 +117,28 @@ variable "ssh_public_key" {
   type        = string
 }
 
+# Optional variables if you want to also pass ARM credentials via tfvars
 variable "subscription_id" {
-  description = "The subscription ID for the Azure account"
+  description = "Azure Subscription ID"
   type        = string
+  default     = ""
+}
 
+variable "tenant_id" {
+  description = "Azure Tenant ID"
+  type        = string
+  default     = ""
+}
+
+variable "client_id" {
+  description = "Azure Service Principal Client ID"
+  type        = string
+  default     = ""
+}
+
+variable "client_secret" {
+  description = "Azure Service Principal Client Secret"
+  type        = string
+  sensitive   = true
+  default     = ""
 }
