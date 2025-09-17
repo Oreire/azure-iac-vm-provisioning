@@ -63,13 +63,13 @@ jobs:
 
       - name: Terraform Plan
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform plan \ 
-          -var-file="azure.tfvars" \
-          -var "client_id=${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}" \
-          -var "client_secret=${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}" \
-          -var "tenant_id=${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}" \
-          -var "subscription_id=${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}" \
-          -var "ssh_public_key=${{ secrets.SSH_PUBLIC_KEY }}"
+        run: terraform plan  -var-file="azure.tfvars" \
+        #   -var-file="azure.tfvars" \
+        #   -var "client_id=${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}" \
+        #   -var "client_secret=${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}" \
+        #   -var "tenant_id=${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}" \
+        #   -var "subscription_id=${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}" \
+        #   -var "ssh_public_key=${{ secrets.SSH_PUBLIC_KEY }}"
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.action == 'apply' && github.ref == 'refs/heads/main' }}
