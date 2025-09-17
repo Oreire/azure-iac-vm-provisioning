@@ -115,7 +115,6 @@ variable "tenant_id" {
   description = "The Tenant ID of the Azure Active Directory"
   type        = string
 }
-
 variable "data_disks" {
   description = "Data disks to attach to the VM"
   type = list(object({
