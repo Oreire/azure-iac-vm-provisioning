@@ -66,5 +66,5 @@ terraform apply destroy.out
 
 ---
 
-✅ This pattern is especially useful in **production or CI/CD pipelines**, where you want to approve a reviewed plan before execution.
+✅ This pattern is especially useful in **production or CI/CD pipelines**, enabling approval of the reviewed plan before execution.
 
