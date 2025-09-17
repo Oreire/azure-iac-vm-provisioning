@@ -43,13 +43,21 @@ jobs:
           echo "TF_VAR_tenant_id=${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}" >> $GITHUB_ENV
           echo "TF_VAR_subscription_id=${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}" >> $GITHUB_ENV
           echo "TF_VAR_ssh_public_key=${{ secrets.SSH_PUBLIC_KEY }}" >> $GITHUB_ENV
-
+      
       - name: Terraform Init
-        run: terraform -chdir=VM init \
+        run: |
+          terraform -chdir=VM init \
           -backend-config="resource_group_name=devsecops-cloud_group" \
           -backend-config="storage_account_name=${{ secrets.AZURE_STORAGE_ACCOUNT }}" \
           -backend-config="container_name=tfstate" \
           -backend-config="key=terraform.tfstate"
+
+    #   - name: Terraform Init
+    #     run: terraform -chdir=VM init \
+    #       -backend-config="resource_group_name=devsecops-cloud_group" \
+    #       -backend-config="storage_account_name=${{ secrets.AZURE_STORAGE_ACCOUNT }}" \
+    #       -backend-config="container_name=tfstate" \
+    #       -backend-config="key=terraform.tfstate"
 
       - name: Terraform Format Check
         run: terraform -chdir=VM fmt -check -recursive
