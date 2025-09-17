@@ -44,11 +44,7 @@ jobs:
           echo "ARM_SUBSCRIPTION_ID=${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}" >> $GITHUB_ENV
 
       - name: Terraform Init
-        run: terraform -chdir=VM init \
-          -backend-config="resource_group_name=devsecops-cloud_group" \
-          -backend-config="storage_account_name=${{ secrets.AZURE_STORAGE_ACCOUNT }}" \
-          -backend-config="container_name=tfstate" \
-          -backend-config="key=terraform.tfstate"
+        run: terraform -chdir=VM init -backend-config="resource_group_name=devsecops-cloud_group" -backend-config="storage_account_name=${{ secrets.AZURE_STORAGE_ACCOUNT }}" -backend-config="container_name=tfstate" -backend-config="key=terraform.tfstate"
 
       - name: Terraform Format Check
         run: terraform -chdir=VM fmt -check -recursive
