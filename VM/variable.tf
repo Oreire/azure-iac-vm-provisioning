@@ -132,7 +132,7 @@ variable "AZURE_STORAGE_ACCOUNT" {
   default     = "devsecopscloudtfstate"
 }
 
-# variable "ssh_public_key" {
-#   description = "The public SSH key used for VM login"
-#   type        = string
-# }
+variable "ssh_public_key" {
+  description = "The public SSH key used for VM login"
+  type        = string
+}
