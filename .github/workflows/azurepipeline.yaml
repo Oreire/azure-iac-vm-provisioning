@@ -59,7 +59,7 @@ jobs:
         run: terraform -chdir=VM validate
 
       - name: Terraform Plan
-        run: terraform -chdir=VM plan # -var-file="devsec.tfvars"
+        run: terraform -chdir=VM plan -var="address_space=10.0.0.0/16"
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.action == 'apply' && github.ref == 'refs/heads/main' }}
