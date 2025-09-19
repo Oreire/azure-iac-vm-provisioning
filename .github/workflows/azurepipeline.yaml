@@ -36,13 +36,17 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Set ARM environment variables
+      - name: Set Terraform & ARM environment variables
         run: |
           echo "ARM_CLIENT_ID=${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}" >> $GITHUB_ENV
           echo "ARM_CLIENT_SECRET=${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}" >> $GITHUB_ENV
           echo "ARM_TENANT_ID=${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}" >> $GITHUB_ENV
           echo "ARM_SUBSCRIPTION_ID=${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}" >> $GITHUB_ENV
+
+          # Terraform variables (prefixed with TF_VAR_)
           echo "TF_VAR_ssh_public_key=${{ secrets.SSH_PUBLIC_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_address_space=10.0.0.0/16" >> $GITHUB_ENV
+          echo "TF_VAR_admin_username=${{ secrets.ADMIN_USERNAME }}" >> $GITHUB_ENV
 
       - name: Terraform Init
         run: |
@@ -59,12 +63,12 @@ jobs:
         run: terraform -chdir=VM validate
 
       - name: Terraform Plan
-        run: terraform -chdir=VM plan -var="address_space=10.0.0.0/16"
+        run: terraform -chdir=VM plan
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.action == 'apply' && github.ref == 'refs/heads/main' }}
-        run: terraform -chdir=VM apply -auto-approve # -var-file="devsec.tfvars" 
+        run: terraform -chdir=VM apply -auto-approve
 
       - name: Terraform Destroy
         if: ${{ github.event.inputs.action == 'destroy' }}
-        run: terraform -chdir=VM destroy -auto-approve # -var-file="devsec.tfvars"
+        run: terraform -chdir=VM destroy -auto-approve
