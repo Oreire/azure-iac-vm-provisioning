@@ -95,26 +95,26 @@ variable "os_disk_type" {
   type        = string
 }
 
-variable "subscription_id" {
-  description = "The subscription ID for the Azure account"
-  type        = string
-}
+# variable "subscription_id" {
+#   description = "The subscription ID for the Azure account"
+#   type        = string
+# }
 
-variable "client_id" {
-  description = "The Client ID (AppId) of the Azure Service Principal"
-  type        = string
-}
+# variable "client_id" {
+#   description = "The Client ID (AppId) of the Azure Service Principal"
+#   type        = string
+# }
 
-variable "client_secret" {
-  description = "The Client Secret (password) of the Azure Service Principal"
-  type        = string
-  sensitive   = true
-}
+# variable "client_secret" {
+#   description = "The Client Secret (password) of the Azure Service Principal"
+#   type        = string
+#   sensitive   = true
+# }
 
-variable "tenant_id" {
-  description = "The Tenant ID of the Azure Active Directory"
-  type        = string
-}
+# variable "tenant_id" {
+#   description = "The Tenant ID of the Azure Active Directory"
+#   type        = string
+# }
 variable "data_disks" {
   description = "Data disks to attach to the VM"
   type = list(object({
