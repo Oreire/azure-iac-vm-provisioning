@@ -68,4 +68,4 @@ terraform apply destroy.out
 
 ✅ This pattern is especially useful in **production or CI/CD pipelines**, enabling approval of the reviewed plan before execution.
 
-removed state lock
+removed state lock 2
