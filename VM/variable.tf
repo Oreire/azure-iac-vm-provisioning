@@ -118,7 +118,7 @@ variable "os_disk_type" {
 
 variable "data_disks" {
   description = "Data disks to attach to the VM"
-  type        = list(object({
+  type = list(object({
     name = string
     size = number
   }))
