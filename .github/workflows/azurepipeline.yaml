@@ -63,12 +63,13 @@ jobs:
         run: terraform -chdir=VM validate
 
       - name: Terraform Plan
+        id: plan
         run: terraform -chdir=VM plan
 
       - name: Terraform Apply
-        if: ${{ github.event.inputs.action == 'apply' && github.ref == 'refs/heads/main' }}
+        if: ${{ success() && github.event.inputs.action == 'apply' && github.ref == 'refs/heads/main' }}
         run: terraform -chdir=VM apply -auto-approve
 
       - name: Terraform Destroy
-        if: ${{ github.event.inputs.action == 'destroy' }}
+        if: ${{ success() && github.event.inputs.action == 'destroy' }}
         run: terraform -chdir=VM destroy -auto-approve
