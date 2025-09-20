@@ -115,16 +115,26 @@ variable "os_disk_type" {
 #   description = "The Tenant ID of the Azure Active Directory"
 #   type        = string
 # }
+
 variable "data_disks" {
   description = "Data disks to attach to the VM"
-  type = list(object({
-    name                 = string
-    lun                  = number
-    storage_account_type = string
-    disk_size_gb         = number
-    caching              = string
+  type        = list(object({
+    name = string
+    size = number
   }))
+  default = []
 }
+
+# variable "data_disks" {
+#   description = "Data disks to attach to the VM"
+#   type = list(object({
+#     name                 = string
+#     lun                  = number
+#     storage_account_type = string
+#     disk_size_gb         = number
+#     caching              = string
+#   }))
+# }
 
 variable "AZURE_STORAGE_ACCOUNT" {
   description = "The name of the Azure Storage Account for Terraform backend"
