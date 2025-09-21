@@ -84,25 +84,26 @@ resource "azurerm_managed_disk" "data_disk" {
 
 # Linux VM
 resource "azurerm_linux_virtual_machine" "vm" {
-  name                = var.vm_name
-  location            = var.location
+  name                = "vm-instance"
   resource_group_name = azurerm_resource_group.rg.name
-  size                = var.vm_size
+  location            = azurerm_resource_group.rg.location
+  size                = "Standard_B1s"
   admin_username      = var.admin_username
-  computer_name       = var.vm_computer_name
   network_interface_ids = [
-    azurerm_network_interface.nic.id
+    azurerm_network_interface.nic.id,
   ]
+
+  disable_password_authentication = true
+
+  admin_ssh_key {
+    username   = var.admin_username
+    public_key = var.ssh_public_key
+  }
 
   os_disk {
     caching              = "ReadWrite"
-    storage_account_type = var.os_disk_type
+    storage_account_type = "Standard_LRS"
   }
-
-  #   admin_ssh_key {
-  #     username   = var.admin_username
-  #     public_key = var.ssh_public_key
-  #   }
 
   source_image_reference {
     publisher = "Canonical"
@@ -110,9 +111,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
     sku       = "22_04-lts-gen2"
     version   = "latest"
   }
-
-  boot_diagnostics {}
-  provision_vm_agent = true
 }
 
 # Attach managed disks

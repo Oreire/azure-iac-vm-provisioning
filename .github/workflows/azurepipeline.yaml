@@ -43,7 +43,7 @@ jobs:
           echo "ARM_TENANT_ID=${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}" >> $GITHUB_ENV
           echo "ARM_SUBSCRIPTION_ID=${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}" >> $GITHUB_ENV
           
-          # Terraform variables (only required ones)
+          # ✅ Expose SSH key and admin username as Terraform variables
           echo "TF_VAR_ssh_public_key=${{ secrets.SSH_PUBLIC_KEY }}" >> $GITHUB_ENV
           echo "TF_VAR_admin_username=${{ secrets.ADMIN_USERNAME }}" >> $GITHUB_ENV
 
@@ -65,14 +65,17 @@ jobs:
         id: plan
         run: terraform -chdir=VM plan
 
+      # ✅ Auto-apply on push to main (with SSH key + admin username already injected via TF_VAR_*)
       - name: Terraform Apply (push to main)
         if: ${{ success() && github.event_name == 'push' }}
         run: terraform -chdir=VM apply -auto-approve
 
+      # ✅ Manual trigger for apply
       - name: Terraform Apply (manual)
         if: ${{ success() && github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply' }}
         run: terraform -chdir=VM apply -auto-approve
 
+      # ✅ Manual trigger for destroy
       - name: Terraform Destroy (manual)
         if: ${{ success() && github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy' }}
         run: terraform -chdir=VM destroy -auto-approve

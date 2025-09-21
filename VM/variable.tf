@@ -53,7 +53,6 @@ variable "nsg_rules" {
     source_address_prefix      = string
     destination_address_prefix = string
   }))
-  # Allow SSH inbound from any IP by default
   default = [
     {
       name                       = "SSH"
@@ -114,6 +113,7 @@ variable "vm_size" {
 variable "admin_username" {
   description = "Admin username for the VM"
   type        = string
+  sensitive   = true
   # ⚠️ No default for security reasons — will come from GitHub secret
 }
 
@@ -141,5 +141,6 @@ variable "AZURE_STORAGE_ACCOUNT" {
 variable "ssh_public_key" {
   description = "The public SSH key used for VM login"
   type        = string
+  sensitive   = true
   # ⚠️ No default for security reasons — will come from GitHub secret
 }
