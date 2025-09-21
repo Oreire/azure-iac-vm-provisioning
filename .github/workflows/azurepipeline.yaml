@@ -43,14 +43,13 @@ jobs:
           echo "ARM_TENANT_ID=${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}" >> $GITHUB_ENV
           echo "ARM_SUBSCRIPTION_ID=${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}" >> $GITHUB_ENV
           
-          # Terraform variables (prefixed with TF_VAR_)
+          # Terraform variables (only required ones)
           echo "TF_VAR_ssh_public_key=${{ secrets.SSH_PUBLIC_KEY }}" >> $GITHUB_ENV
-          echo "TF_VAR_address_space=10.0.0.0/16" >> $GITHUB_ENV
           echo "TF_VAR_admin_username=${{ secrets.ADMIN_USERNAME }}" >> $GITHUB_ENV
-          
+
       - name: Terraform Init
         run: |
-          terraform -chdir=VM init \
+          terraform -chdir=VM init -upgrade \
             -backend-config="resource_group_name=devsecops-cloud_group" \
             -backend-config="storage_account_name=${{ secrets.AZURE_STORAGE_ACCOUNT }}" \
             -backend-config="container_name=tfstate" \
