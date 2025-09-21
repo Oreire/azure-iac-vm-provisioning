@@ -65,10 +65,14 @@ jobs:
         id: plan
         run: terraform -chdir=VM plan
 
-      - name: Terraform Apply
-        if: ${{ success() && github.event.inputs.action == 'apply' }}
+      - name: Terraform Apply (push to main)
+        if: ${{ success() && github.event_name == 'push' }}
         run: terraform -chdir=VM apply -auto-approve
 
-      - name: Terraform Destroy
-        if: ${{ success() && github.event.inputs.action == 'destroy' }}
+      - name: Terraform Apply (manual)
+        if: ${{ success() && github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply' }}
+        run: terraform -chdir=VM apply -auto-approve
+
+      - name: Terraform Destroy (manual)
+        if: ${{ success() && github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy' }}
         run: terraform -chdir=VM destroy -auto-approve
