@@ -66,7 +66,7 @@ jobs:
         run: terraform -chdir=VM plan
 
       - name: Terraform Apply
-        if: ${{ success() && github.event.inputs.action == 'apply' && github.ref == 'refs/heads/main' }}
+        if: ${{ success() && github.event.inputs.action == 'apply' && (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch') }}
         run: terraform -chdir=VM apply -auto-approve
 
       - name: Terraform Destroy
